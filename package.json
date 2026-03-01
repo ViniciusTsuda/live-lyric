@@ -1,0 +1,26 @@
+{
+  "name": "live-lyric",
+  "version": "1.0.0",
+  "description": "Detecta automaticamente a música tocando no seu navegador e busca a letra via **Genius API**, exibindo tudo em uma interface elegante.",
+  "keywords": [
+    "music",
+    "songs",
+    "lyric",
+    "geniusapi"
+  ],
+  "homepage": "https://github.com/ViniciusTsuda/live-lyric#readme",
+  "bugs": {
+    "url": "https://github.com/ViniciusTsuda/live-lyric/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ViniciusTsuda/live-lyric.git"
+  },
+  "license": "ISC",
+  "author": "Vinicius Hideki Tsuda",
+  "type": "commonjs",
+  "main": "popup.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}

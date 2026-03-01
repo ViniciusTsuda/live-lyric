@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LyricSync</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-logo">🎵</div>
+    <div class="header-info">
+      <h1>LyricSync</h1>
+      <p>Letras em tempo real</p>
+    </div>
+    <div class="header-actions">
+      <button class="icon-btn" id="btn-reload" title="Atualizar letra">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
+        </svg>
+      </button>
+      <button class="icon-btn" id="btn-settings" title="Configurações">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Painel de Configurações -->
+  <div class="settings-panel" id="settings-panel">
+    <div class="settings-label">Genius API Token</div>
+    <div class="settings-row">
+      <input type="password" class="settings-input" id="token-input" placeholder="Cole seu token aqui..." />
+      <button class="save-btn" id="save-token-btn">Salvar</button>
+    </div>
+    <div class="settings-hint">
+      Obtenha seu token em <a href="https://genius.com/api-clients" target="_blank">genius.com/api-clients</a> → crie um cliente → copie o "Client Access Token".
+    </div>
+  </div>
+
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <div class="status-dot" id="status-dot"></div>
+    <span class="status-text" id="status-text">Aguardando música...</span>
+  </div>
+
+  <!-- Main Content -->
+  <div id="main-content" style="flex:1; display:flex; flex-direction:column; overflow:hidden;">
+
+    <!-- No Token State -->
+    <div class="state-container" id="state-no-token" style="display:none;">
+      <div class="state-icon">🔑</div>
+      <div class="state-title">Configure seu token</div>
+      <div class="state-desc">Para buscar letras, você precisa de um token da Genius API. É gratuito e leva menos de 1 minuto.</div>
+      <button class="no-token-btn" id="open-settings-btn">Configurar agora</button>
+    </div>
+
+    <!-- No Music State -->
+    <div class="state-container" id="state-no-music">
+      <div class="state-icon">🎧</div>
+      <div class="state-title">Nenhuma música detectada</div>
+      <div class="state-desc">Toque uma música em qualquer aba do navegador. O LyricSync detectará automaticamente via Media Session API.</div>
+    </div>
+
+    <!-- Loading State -->
+    <div class="state-container" id="state-loading" style="display:none;">
+      <div class="loading-spinner"></div>
+      <div class="state-title">Buscando letra...</div>
+      <div class="state-desc" id="loading-desc"></div>
+    </div>
+
+    <!-- Error State -->
+    <div class="state-container" id="state-error" style="display:none;">
+      <div class="state-icon">😕</div>
+      <div class="state-title" id="error-title">Letra não encontrada</div>
+      <div class="state-desc" id="error-desc"></div>
+    </div>
+
+    <!-- Lyrics State -->
+    <div id="state-lyrics" style="display:none; flex:1; flex-direction:column; overflow:hidden;">
+      <!-- Tocando Agora -->
+      <div class="now-playing">
+        <div class="np-label">Tocando agora</div>
+        <div class="np-card">
+          <div class="np-art" id="song-art">🎵</div>
+          <div class="np-info">
+            <h2 id="song-title">—</h2>
+            <p id="song-artist">—</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Letra -->
+      <div class="lyrics-section">
+        <div class="lyrics-header">
+          <span class="lyrics-title">Letra</span>
+          <a class="genius-link" id="genius-link" href="#" target="_blank">
+            Ver no Genius
+            <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </a>
+        </div>
+        <div class="lyrics-body">
+          <div class="lyrics-text" id="lyrics-text"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
