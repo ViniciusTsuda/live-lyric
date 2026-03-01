@@ -82,6 +82,12 @@ async function searchLyrics(artist, title, sendResponse) {
     const match = findBestMatch(hits, artist, title) || hits[0].result;
     const lyricsPageUrl = match.url;
 
+    //Passo 3: Verifica se a URL é válida antes de tentar scrape
+    if (!isLyricsUrl(lyricsPageUrl)) {
+      sendResponse({ error: 'NOT_FOUND' });
+      return;
+    }
+
     // Passo 3: Scrape da página de letra (pois a API do Genius não retorna a letra completa)
     const lyrics = await scrapeWithTab(lyricsPageUrl);
 
@@ -110,6 +116,12 @@ function optimizeQuery(artist, title) {
   q = q.replace(/\s{2,}/g, ' ').trim();
   return q;
 }
+
+// ─── Helpers ──────────────────────────────────────────────────────────
+function isLyricsUrl(url) {
+  return url && /genius\.com\/.+-lyrics$/i.test(url);
+}
+
 
 // ─── Busca melhor match ─────────────────
 function findBestMatch(hits, artist, title) {
