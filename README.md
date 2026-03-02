@@ -1,4 +1,4 @@
-# 🎵 LyricSync — Extensão para Microsoft Edge
+# 🎵 LiveLyric — Extensão para Microsoft Edge
 
 Detecta automaticamente a música tocando no seu navegador e busca a letra via **Genius API**, exibindo tudo em uma interface elegante.
 

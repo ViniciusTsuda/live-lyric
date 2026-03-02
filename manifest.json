@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
-  "name": "LyricSync - Letras em Tempo Real",
-  "version": "1.0.0",
+  "name": "LiveLyric - Buscador de Letras em Tempo Real",
+  "version": "1.0.1",
   "description": "Detecta músicas tocando no navegador e busca a letra automaticamente via Genius API.",
   "permissions": [
     "activeTab",
@@ -18,7 +18,7 @@
   ],
   "action": {
     "default_popup": "popup.html",
-    "default_title": "LyricSync",
+    "default_title": "LiveLyric",
     "default_icon": {
       "16": "icons/icon16.png",
       "48": "icons/icon48.png",
